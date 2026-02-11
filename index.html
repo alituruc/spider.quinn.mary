@@ -7,20 +7,30 @@
 
 <style>
 body{
-font-family:Arial, sans-serif;
 margin:0;
-background:#fff;
-text-align:center;
-overflow-x:hidden;
+font-family:Arial, sans-serif;
+background:white;
+color:black;
 }
 
-/* LOGO */
+/* GOOGLE HOME */
+#googleHome{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+text-align:center;
+}
+
 .logo{
 font-size:70px;
-margin-top:100px;
-letter-spacing:-3px;
 font-weight:bold;
+margin-bottom:20px;
+font-family:Arial;
 }
+
 .logo span:nth-child(1){color:#4285F4;}
 .logo span:nth-child(2){color:#EA4335;}
 .logo span:nth-child(3){color:#FBBC05;}
@@ -28,111 +38,100 @@ font-weight:bold;
 .logo span:nth-child(5){color:#34A853;}
 .logo span:nth-child(6){color:#EA4335;}
 
-/* SEARCH */
-.search-container{
-margin-top:30px;
-display:flex;
-justify-content:center;
-}
 .search-box{
-display:flex;
-align-items:center;
-border:1px solid #ddd;
-border-radius:30px;
-padding:10px 15px;
-width:600px;
-max-width:90%;
-box-shadow:0 1px 6px rgba(32,33,36,.28);
-}
-.search-box input{
-border:none;
+width:100%;
+max-width:580px;
+border:1px solid #dfe1e5;
+border-radius:24px;
+padding:14px 20px;
+font-size:18px;
 outline:none;
-flex:1;
-font-size:16px;
-}
-.search-icon{
-margin-right:10px;
-color:#5f6368;
+box-shadow:0 1px 6px rgba(32,33,36,0.28);
+transition:0.2s;
 }
 
-/* TABS */
-.tabs{
-margin-top:30px;
+.search-box:focus{
+box-shadow:0 2px 8px rgba(32,33,36,0.35);
+}
+
+/* RESULTS */
+#results{
 display:none;
-justify-content:center;
-gap:30px;
-border-bottom:1px solid #eee;
+padding:20px;
+}
+
+.tabs{
+display:flex;
+gap:25px;
+border-bottom:1px solid #dadce0;
 padding-bottom:10px;
+margin-bottom:20px;
 font-size:14px;
 }
+
 .tab{
 cursor:pointer;
-padding-bottom:5px;
-color:#5f6368;
+padding-bottom:8px;
+color:black;
 }
+
 .tab.active{
-color:#1a73e8;
-border-bottom:2px solid #1a73e8;
+border-bottom:3px solid black;
+font-weight:bold;
 }
 
-/* SECTIONS */
-.section{
-display:none;
-width:90%;
-max-width:900px;
-margin:30px auto;
-text-align:left;
-animation:fadeIn 1s ease;
-}
-@keyframes fadeIn{
-from{opacity:0;}
-to{opacity:1;}
-}
+.section{ display:none; }
+.section.active{ display:block; }
 
-/* GALLERY */
-.gallery{
+/* PHOTO GRID */
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:10px;
-}
-.gallery img{
-width:100%;
-border-radius:10px;
-cursor:pointer;
-transition:.3s;
-}
-.gallery img:hover{
-transform:scale(1.05);
+grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+gap:15px;
 }
 
-/* LIGHTBOX */
-#lightbox{
+.grid img, .grid video{
+width:100%;
+border-radius:8px;
+cursor:pointer;
+}
+
+.link{
+font-size:12px;
+color:black;
+word-break:break-all;
+}
+
+/* FULLSCREEN */
+#fullscreen{
 display:none;
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.9);
+background:rgba(0,0,0,0.95);
 justify-content:center;
 align-items:center;
+z-index:9999;
 }
-#lightbox img{
-max-width:90%;
-max-height:90%;
+
+#fullscreen img, #fullscreen video{
+max-width:95%;
+max-height:95%;
 }
 
 /* ENVELOPE */
 .envelope{
-width:260px;
-height:170px;
-background:#f5f5f5;
-margin:40px auto;
+width:220px;
+height:140px;
+background:#fbbc05;
+margin:60px auto;
 position:relative;
 cursor:pointer;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,.2);
+border-radius:8px;
 }
+
 .envelope:before{
 content:"";
 position:absolute;
@@ -140,152 +139,184 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:linear-gradient(135deg,#ddd 50%,transparent 50%);
-border-radius:10px;
+background:#ea4335;
+clip-path:polygon(0 0,50% 60%,100% 0);
 }
 
+/* LETTER */
 .letter{
 display:none;
 background:white;
-padding:25px;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,.3);
-line-height:1.8;
+padding:20px;
+border-radius:12px;
+white-space:pre-line;
+line-height:1.7;
+font-size:16px;
 }
 
-/* SPIDER */
+/* SPIDERS */
 .spider{
 position:fixed;
-top:-60px;
-animation:fall 5s linear forwards;
+width:45px;
+animation:fall 3s linear forwards;
+z-index:10000;
 }
+
 @keyframes fall{
-to{
-transform:translateY(100vh) rotate(360deg);
-opacity:0;
-}
+0%{ top:-60px; }
+100%{ top:100vh; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgMusic" loop>
-<source src="music.mp3">
+<audio id="music" loop>
+<source src="music.mp3" type="audio/mpeg">
 </audio>
 
+<!-- GOOGLE HOME -->
+<div id="googleHome">
 <div class="logo">
 <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
 </div>
-
-<div class="search-container">
-<div class="search-box">
-<span class="search-icon">🔍</span>
-<input id="searchInput" placeholder="Dünyada örümcekten en çok korkan kişi kim?">
-</div>
+<input id="searchInput" class="search-box" type="text">
 </div>
 
-<div class="tabs" id="tabs">
-<div class="tab active" onclick="showSection('all',this)">Tümü</div>
-<div class="tab" onclick="showSection('photos',this)">Fotoğraflar</div>
-<div class="tab" onclick="showSection('about',this)">Hakkında</div>
-<div class="tab" onclick="showSection('letter',this)">Mektup</div>
+<!-- RESULTS -->
+<div id="results">
+
+<div class="tabs">
+<div class="tab active" onclick="showTab('all',event)">Tümü</div>
+<div class="tab" onclick="showTab('photos',event)">Fotoğraflar</div>
+<div class="tab" onclick="showTab('letter',event)">Mektup</div>
 </div>
 
-<!-- TÜMÜ -->
-<div id="all" class="section">
-<h2>Dünyada örümcekten en çok korkan insan bulundu!</h2>
-<p><b>Mary</b> 🕷</p>
-<p>ئەو کەسەیە کە کاتێک مێروولە ببینێت، بە سێ زمان هاوار دەکات.</p>
-<p>Mary کچەکی جوانە و زۆر زیرەکە. هەرچەندە لە مێروولە دەترسێت 😌</p>
+<!-- ALL -->
+<div id="all" class="section active">
+<h2>Mary (18)</h2>
+<p>Mary, 18 yaşında Kürt bir kızdır.</p>
+<p>Kahverengini ve kahveyi çok sever ☕🤎</p>
+<p>Gezmeyi sever, yabancı şarkılar dinler.</p>
+<p>Almanca, Fransızca ve Kürtçe biliyor.</p>
+<p>K-drama bağımlısıdır.</p>
+<p>Kendine “obezim” der ama hiç alakası yok. Gayet güzel fiziği var ve kendisi de güzel.</p>
+<p>Bazen kendini sevmez ama dışarıdan bakınca etkileyici biridir.</p>
+<p>Kitap okumayı çok sever ve hedefi hukuk kazanmaktır.</p>
+<p><b>En büyük korkusu:</b> Örümcekler 🕷️</p>
 </div>
 
-<!-- FOTOĞRAFLAR -->
+<!-- PHOTOS -->
 <div id="photos" class="section">
-<div class="gallery">
-<img src="foto1.jpg" onclick="openLightbox(this.src)">
-<img src="foto2.jpg" onclick="openLightbox(this.src)">
-<img src="foto3.jpg" onclick="openLightbox(this.src)">
-<img src="foto4.jpg" onclick="openLightbox(this.src)">
-<img src="foto5.jpg" onclick="openLightbox(this.src)">
-<img src="foto6.jpg" onclick="openLightbox(this.src)">
-<img src="foto7.jpg" onclick="openLightbox(this.src)">
-<img src="foto8.jpg" onclick="openLightbox(this.src)">
-<img src="foto9.jpg" onclick="openLightbox(this.src)">
+<div class="grid">
+
+<script>
+for(let i=1;i<=9;i++){
+document.write(`
+<div>
+<img src="foto${i}.jpg" onclick="openFullscreen(this.src)">
+<div class="link">https://ekmek.yiyen.kopek.com</div>
 </div>
-</div>
+`);
+}
+</script>
 
-<!-- HAKKINDA -->
-<div id="about" class="section">
-<p>ناوی: Mary</p>
-<p>لە عێراق لەدایکبووە و ژیانی لە چەند وڵاتێک تاقیکردووەتەوە.</p>
-<p>زمانەکان: کوردی (سۆرانی)، ئەڵمانی، فەرەنسی.</p>
-<p>خۆشەویستی: K-drama، موزیک بیانی، خوێندن.</p>
-<p>ئامانج: بوون بە پارێزەر ⚖</p>
-</div>
-
-<!-- MEKTUP -->
-<div id="letter" class="section">
-
-<div class="envelope" onclick="openLetter()"></div>
-
-<div class="letter" id="letterContent">
-<p>
-ئێمە تازە ناسینمان بەیەکتر کردووە، بەڵام قسەکانت زۆر جوانن.<br><br>
-هیوادارم لە ئینگلتەرا دیپۆرت نەکرێیت 🙏🏻<br><br>
-هیوادارم تاقیکردنەوەکانت بە سەرکەوتوویی تێپەڕێنیت و یاسا وەرگریت ⚖<br><br>
-سەرکەوتوو بیت، خۆشەویست دەکرێیت 💛
-</p>
+<div>
+<video src="video.mp4" controls onclick="openFullscreen(this.src)"></video>
+<div class="link">https://ekmek.yiyen.kopek.com</div>
 </div>
 
 </div>
-
-<div id="lightbox" onclick="closeLightbox()">
-<img id="lightbox-img">
 </div>
+
+<!-- LETTER -->
+<div id="letter" class="section" style="text-align:center;">
+
+<div id="envelope" class="envelope" onclick="openLetter()"></div>
+
+<div id="letterText" class="letter">
+ئێمه‌ نوێ ناسین، بەڵام من زۆر حەزم لە قسەکانتە.
+ڕاستی، لەو ئەپە بێمانایەی کە لێی ناسین، تۆ ڕاستترین کەسیت کە من ناسیم.
+بڕوا بکە، وام دەڵێم ئێمە وەک دوو برا-خوشکی ونبووین 😜
+لەوانەیەش نیوە-برا-خوشک بین 🙄
+هەرچۆنێک بێت… هیوادارم لە ئینگلیستان دیپۆرت نەکرێیت!
+هێشتا دێمە گەڕەکی ئێوە 😏
+هیوادارم هەموو تاقیکردنەوەکانت وەک دەتەوێت تێپەڕبن.
+بە هیوای من ببیتە ئەنجەمە ئەنجەمە باشترین پارێزەر.
+من باوەڕم پێتە — بەڕاستی 😌
+سەرکەوتن!
+بزانە کە خۆشەویست دەکرێیت 🤍😜🤟🏻
+</div>
+
+</div>
+
+</div>
+
+<div id="fullscreen" onclick="closeFullscreen()"></div>
 
 <script>
 
-document.getElementById("searchInput").addEventListener("keypress",function(e){
-if(e.key==="Enter"){
-document.getElementById("tabs").style.display="flex";
-showSection('all');
-document.getElementById("bgMusic").play();
-}
-});
+/* MUSIC FIX */
+const music = document.getElementById("music");
+document.body.addEventListener("click", () => {
+music.play().catch(()=>{});
+},{ once:true });
 
-function showSection(id,el){
-document.querySelectorAll('.section').forEach(sec=>sec.style.display='none');
-document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
-document.getElementById(id).style.display='block';
-if(el) el.classList.add('active');
+/* AUTO TYPE */
+let text="ekmek yiyen köpek";
+let i=0;
+let input=document.getElementById("searchInput");
+
+function type(){
+if(i<text.length){
+input.value+=text.charAt(i);
+i++;
+setTimeout(type,100);
+}else{
+setTimeout(showResults,800);
+}
+}
+window.onload=type;
+
+function showResults(){
+document.getElementById("googleHome").style.display="none";
+document.getElementById("results").style.display="block";
 }
 
-function openLightbox(src){
-document.getElementById("lightbox").style.display="flex";
-document.getElementById("lightbox-img").src=src;
+function showTab(id,e){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+e.target.classList.add("active");
 }
 
-function closeLightbox(){
-document.getElementById("lightbox").style.display="none";
+function openFullscreen(src){
+let fs=document.getElementById("fullscreen");
+fs.style.display="flex";
+if(src.includes(".mp4")){
+fs.innerHTML=`<video src="${src}" controls autoplay></video>`;
+}else{
+fs.innerHTML=`<img src="${src}">`;
+}
+}
+
+function closeFullscreen(){
+document.getElementById("fullscreen").style.display="none";
 }
 
 function openLetter(){
-document.getElementById("letterContent").style.display="block";
-spiderRain();
-}
+document.getElementById("envelope").style.display="none";
+document.getElementById("letterText").style.display="block";
 
-function spiderRain(){
-for(let i=0;i<35;i++){
-let spider=document.createElement("div");
+for(let i=0;i<25;i++){
+let spider=document.createElement("img");
+spider.src="spider.jpeg";
 spider.className="spider";
 spider.style.left=Math.random()*100+"vw";
-spider.innerHTML="<img src='spider.jpeg' width='40'>";
 document.body.appendChild(spider);
-setTimeout(()=>{spider.remove();},5000);
+setTimeout(()=>{spider.remove()},3000);
 }
 }
-
 </script>
 
 </body>
